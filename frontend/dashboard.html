@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POCKETPAL - Dashboard</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+    <!-- Google Font: Sora -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="shortcut icon" href="assets/logoPocketPal.png" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <!-- Style.css Propio -->
+     <link rel="stylesheet" href="css/styles.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sora: ['Sora', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        nova: {
+                            bg: '#0a0b0f',
+                            bg2: '#0e0f16',
+                            bg3: '#13141e',
+                            surface: '#191a27',
+                            border: 'rgba(124,0,255,0.15)',
+                            border2: 'rgba(139,0,255,0.3)',
+                            purple: '#7c00ff',
+                            violet: '#8b00ff',
+                            text: '#e8e0ff',
+                            text2: '#9b8ec4',
+                            text3: '#5a5073',
+                            green: '#00e5a0',
+                            red: '#ff4d6d',
+                            blue: '#4d9fff',
+                            gold: '#f5c542',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body>
+    <div class="app-shell">
+
+        <!-- ── Sidebar ─────────────────────────────────────────────────────────── -->
+        <aside id="sidebar"
+            class="sidebar flex flex-col bg-nova-bg2 border-r fixed lg:sticky top-0 left-0 h-full lg:h-screen w-[240px] transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40">
+
+            <!-- Logo -->
+            <div class="flex items-center gap-3 px-5 h-16 flex-shrink-0 logo">
+                <div
+                    class="w-8 h-8 rounded-lg nova-grad grid place-items-center font-sora font-black text-sm text-white flex-shrink-0">
+                    <img src="assets/logoPocketPal.png" alt="">
+                </div>
+                <span class="font-sora font-bold text-base tracking-tight text-nova-text">POCKETPAL</span>
+            </div>
+
+            <!-- Nav -->
+            <nav class="flex-1 px-3 py-4 overflow-y-auto">
+
+                <p class="text-[10px] font-semibold uppercase tracking-widest text-nova-text3 px-2 mb-1.5 mt-2">
+                    Principal</p>
+                <a href=""
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-purple font-semibold text-sm mb-0.5"
+                    style="background:rgba(124,0,255,.12)">
+                    <span class="w-5 text-center text-base">◈</span> Dashboard
+                </a>
+                <a href="./ai.html"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">✦</span> Agente POCKETPAL
+                </a>
+
+                <p class="text-[10px] font-semibold uppercase tracking-widest text-nova-text3 px-2 mb-1.5 mt-5">Finanzas
+                </p>
+                <div onclick="scrollToSection('section-transactions')"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all cursor-pointer text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">⇅</span> Transacciones
+                </div>
+                <div onclick="scrollToSection('section-goals')"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all cursor-pointer text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">◎</span> Metas
+                </div>
+                <div onclick="scrollToSection('section-charts')"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all cursor-pointer text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">◑</span> Gráficas
+                </div>
+
+                <p class="text-[10px] font-semibold uppercase tracking-widest text-nova-text3 px-2 mb-1.5 mt-5">Acciones
+                </p>
+                <div onclick="openModal('modal-tx')"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all cursor-pointer text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">＋</span> Nueva transacción
+                </div>
+                <div onclick="openModal('modal-goal')"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all cursor-pointer text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">⊕</span> Nueva meta
+                </div>
+                <div id="btn-sync"  onclick="syncTransactions()"
+                    class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-nova-text2 font-medium hover:bg-nova-surface hover:text-nova-text transition-all cursor-pointer text-sm mb-0.5">
+                    <span class="w-5 text-center text-base">⟳</span>
+                    Sincronizar
+                    <p id="sync-status" class="text-xs text-nova-text3 mt-1"></p>
+                </div>
+            </nav>
+
+            <!-- User -->
+            <div class="px-3 pb-4 pt-3 flex-shrink-0" style="border-top:1px solid rgba(124,0,255,.15)">
+                <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-nova-bg3">
+                    <div class="w-9 h-9 rounded-full nova-grad grid place-items-center font-bold text-sm text-white flex-shrink-0 overflow-hidden"
+                        id="user-avatar">?</div>
+                    <div class="overflow-hidden flex-1 min-w-0">
+                        <div class="text-sm font-medium truncate text-nova-text" id="user-name">—</div>
+                        <div class="text-xs text-nova-text2 truncate" id="user-email">—</div>
+                    </div>
+                </div>
+                <button onclick="auth.logout()" class="btn btn-ghost w-full mt-2 text-xs">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity lg:hidden z-30">
+        </div>
+        <!-- ── Header ─────────────────────────────────────────────────────────── -->
+
+        <header class="flex items-center justify-between px-5 sm:px-7 h-16 bg-nova-bg2 sticky top-0 z-10"
+            style="border-bottom:1px solid rgba(124,0,255,.15)">
+
+            <div class="flex items-center gap-3">
+
+                <button id="btn-menu"
+                    class="lg:hidden w-10 h-10 rounded-lg bg-nova-bg3 text-nova-text grid place-items-center">
+                    ☰
+                </button>
+
+                <div class="font-sora font-bold text-base sm:text-lg tracking-tight">
+                    Hola, <span class="greeting-name gradient-text">—</span> 👋
+                </div>
+
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="/ai.html" class="btn btn-secondary btn-sm hidden sm:inline-flex">
+                    ✦ Hablar con POCKETPAL
+                </a>
+            </div>
+
+        </header>
+
+        <!-- ── Main content ────────────────────────────────────────────────────── -->
+        <main class="bg-nova-bg overflow-y-auto overflow-x-hidden w-full p-4 sm:p-6 lg:p-7">
+
+            <!-- Stat cards -->
+            <div class="stat-cards-grid page-section">
+
+                <div class="stat-card income bg-nova-bg2 rounded-2xl p-5" style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="absolute top-4 right-4 text-xl opacity-60 text-nova-green">↑</div>
+                    <div class="text-[11px] font-semibold uppercase tracking-widest text-nova-text2 mb-2.5">Ingresos
+                        totales</div>
+                    <div class="font-sora text-2xl font-black tracking-tight text-nova-green mb-2" id="stat-income">—
+                    </div>
+                    <div class="text-xs text-nova-text2">Este período</div>
+                </div>
+
+                <div class="stat-card expense bg-nova-bg2 rounded-2xl p-5" style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="absolute top-4 right-4 text-xl opacity-60 text-nova-red">↓</div>
+                    <div class="text-[11px] font-semibold uppercase tracking-widest text-nova-text2 mb-2.5">Gastos
+                        totales</div>
+                    <div class="font-sora text-2xl font-black tracking-tight text-nova-red mb-2" id="stat-expense">—
+                    </div>
+                    <div class="text-xs text-nova-text2">Este período</div>
+                </div>
+
+                <div class="stat-card balance bg-nova-bg2 rounded-2xl p-5" style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="absolute top-4 right-4 text-xl opacity-60 text-nova-blue">≈</div>
+                    <div class="text-[11px] font-semibold uppercase tracking-widest text-nova-text2 mb-2.5">Balance neto
+                    </div>
+                    <div class="font-sora text-2xl font-black tracking-tight text-nova-blue mb-2" id="stat-balance">—
+                    </div>
+                    <div class="text-xs text-nova-text2">Ingreso − Gastos</div>
+                </div>
+
+                <div class="stat-card goals bg-nova-bg2 rounded-2xl p-5" style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="absolute top-4 right-4 text-xl opacity-60 text-nova-gold">◎</div>
+                    <div class="text-[11px] font-semibold uppercase tracking-widest text-nova-text2 mb-2.5">Metas
+                        activas</div>
+                    <div class="font-sora text-2xl font-black tracking-tight text-nova-gold mb-2" id="stat-goals">—
+                    </div>
+                    <div class="text-xs text-nova-text2">En progreso</div>
+                </div>
+            </div>
+
+            <!-- Charts row -->
+            <div id="section-charts" class="charts-grid page-section">
+                <div class="bg-nova-bg2 rounded-2xl p-5" style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="font-sora font-bold text-sm text-nova-text">Ingresos vs. Gastos</div>
+                            <div class="text-xs text-nova-text2 mt-0.5">Por mes</div>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="chart-monthly"></canvas></div>
+                </div>
+                <div class="bg-nova-bg2 rounded-2xl p-5" style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="font-sora font-bold text-sm text-nova-text">Gastos por categoría</div>
+                            <div class="text-xs text-nova-text2 mt-0.5">Distribución</div>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="chart-categories"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Balance chart -->
+            <div class="bg-nova-bg2 rounded-2xl p-5 mb-5 page-section" style="border:1px solid rgba(124,0,255,.15)">
+                <div class="font-sora font-bold text-sm text-nova-text mb-1">Balance acumulado</div>
+                <div class="text-xs text-nova-text2 mb-4">Evolución mes a mes</div>
+                <div class="chart-container-sm"><canvas id="chart-balance"></canvas></div>
+            </div>
+
+            <!-- Transactions + Goals -->
+            <div class="tx-goals-grid page-section">
+
+                <!-- Transactions -->
+                <div id="section-transactions" class="bg-nova-bg2 rounded-2xl p-5"
+                    style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <div class="font-sora font-bold text-sm text-nova-text">Transacciones</div>
+                            <div class="text-xs text-nova-text2 mt-0.5">Últimas 30</div>
+                        </div>
+                        <button class="btn btn-primary btn-sm" style="width:auto" onclick="openModal('modal-tx')">+
+                            Nueva</button>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters-row">
+                        <select id="filter-type" onchange="applyFilters()">
+                            <option value="">Todos los tipos</option>
+                            <option value="income">Ingresos</option>
+                            <option value="expense">Gastos</option>
+                        </select>
+                        <select id="filter-category" onchange="applyFilters()">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                        <input type="date" id="filter-start" onchange="applyFilters()" />
+                        <input type="date" id="filter-end" onchange="applyFilters()" />
+                        <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Limpiar</button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Monto</th>
+                                    <th>Categoría</th>
+                                    <th>Descripción</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tx-tbody">
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="skeleton" style="height:40px"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Goals -->
+                <div id="section-goals" class="bg-nova-bg2 rounded-2xl p-5"
+                    style="border:1px solid rgba(124,0,255,.15)">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <div class="font-sora font-bold text-sm text-nova-text">Metas de ahorro</div>
+                            <div class="text-xs text-nova-text2 mt-0.5">Activas</div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="openModal('modal-goal')">+ Meta</button>
+                    </div>
+                    <div id="goals-list" class="flex flex-col gap-3">
+                        <div class="skeleton" style="height:80px;border-radius:12px"></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div><!-- /app-shell -->
+
+    <!-- ── Modal: Nueva transacción ────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-tx">
+        <div class="modal">
+            <div class="flex items-center justify-between mb-6">
+                <div class="font-sora font-bold text-lg text-nova-text">Nueva transacción</div>
+                <div onclick="closeModal('modal-tx')"
+                    class="w-8 h-8 rounded-lg bg-nova-bg3 text-nova-text2 grid place-items-center text-lg cursor-pointer hover:bg-nova-surface hover:text-nova-text transition-all">
+                    ×</div>
+            </div>
+            <form id="form-tx" onsubmit="handleCreateTransaction(event)">
+                <div class="form-group">
+                    <label class="form-label">Tipo</label>
+                    <input type="hidden" id="tx-type" value="expense" />
+                    <div class="type-toggle">
+                        <div class="type-btn income" id="type-income" onclick="setTxType('income')">↑ Ingreso</div>
+                        <div class="type-btn expense active" id="type-expense" onclick="setTxType('expense')">↓ Gasto
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Monto</label>
+                        <input type="number" id="tx-amount" placeholder="0.00" step="0.01" min="0.01" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" id="tx-date" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoría</label>
+                    <select id="tx-category" required>
+                        <option value="">Selecciona categoría</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descripción (opcional)</label>
+                    <input type="text" id="tx-description" placeholder="Ej: Almuerzo en el trabajo" />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-tx')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="create-tx-btn" style="width:auto">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── Modal: Nueva meta ────────────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-goal">
+        <div class="modal">
+            <div class="flex items-center justify-between mb-6">
+                <div class="font-sora font-bold text-lg text-nova-text">Nueva meta de ahorro</div>
+                <div onclick="closeModal('modal-goal')"
+                    class="w-8 h-8 rounded-lg bg-nova-bg3 text-nova-text2 grid place-items-center text-lg cursor-pointer hover:bg-nova-surface hover:text-nova-text transition-all">
+                    ×</div>
+            </div>
+            <form id="form-goal" onsubmit="handleCreateGoal(event)">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la meta</label>
+                    <input type="text" id="goal-title" placeholder="Ej: Viaje a Europa" required />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Monto objetivo</label>
+                    <input type="number" id="goal-amount" placeholder="0.00" step="0.01" min="1" required />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-goal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="create-goal-btn" style="width:auto">Crear
+                        meta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── Modal: Abonar a meta ─────────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-allocate">
+        <div class="modal" style="max-width:360px">
+            <div class="flex items-center justify-between mb-4">
+                <div class="font-sora font-bold text-lg text-nova-text">Abonar a meta</div>
+                <div onclick="closeModal('modal-allocate')"
+                    class="w-8 h-8 rounded-lg bg-nova-bg3 text-nova-text2 grid place-items-center text-lg cursor-pointer hover:bg-nova-surface hover:text-nova-text transition-all">
+                    ×</div>
+            </div>
+            <p class="text-nova-text2 text-sm mb-4">Meta: <strong id="allocate-goal-name"
+                    class="text-nova-text"></strong></p>
+            <form id="form-allocate" onsubmit="handleAllocate(event)">
+                <div class="form-group">
+                    <label class="form-label">Monto a abonar</label>
+                    <input type="number" id="allocate-amount" placeholder="0.00" step="0.01" min="0.01" required />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('modal-allocate')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="allocate-btn" style="width:auto">Abonar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        function scrollToSection(id) {
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+
+</html>
