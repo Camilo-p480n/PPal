@@ -49,7 +49,7 @@ const apiFetch = async (endpoint, options = {}) => {
     // Si el token expiró, redirigir al login
     if (response.status === 401) {
       clearAuth();
-      window.location.href = '/frontend/index.html';
+      window.location.href = './index.html';
     }
     throw new Error(data.message || `Error ${response.status}`);
   }
@@ -70,7 +70,7 @@ const auth = {
 
   logout: () => {
     clearAuth();
-    window.location.href = '/frontend/index.html';
+    window.location.href = './index.html';
   },
 };
 
@@ -183,7 +183,7 @@ const toast = {
 // Protección de rutas — llamar al inicio de páginas protegidas
 const requireAuth = () => {
   if (!isLoggedIn()) {
-    window.location.href = '/frontend/index.html';
+    window.location.href = './index.html';
     return false;
   }
   return true;

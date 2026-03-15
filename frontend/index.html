@@ -212,7 +212,7 @@
     <script src="./js/api.js"></script>
     <script>
         // Redirección si ya está logueado
-        if (typeof isLoggedIn === 'function' && isLoggedIn()) window.location.href = '/frontend/dashboard.html';
+        if (typeof isLoggedIn === 'function' && isLoggedIn()) window.location.href = './dashboard.html';
 
         const btnGoogle = document.getElementById('btn-google');
 
@@ -254,7 +254,7 @@
             try {
                 const res = await auth.login(email, password);
                 saveAuth(res.data.token, res.data.user);
-                window.location.href = '/frontend/dashboard.html';
+                window.location.href = './dashboard.html';
             } catch (err) {
                 // Se asume que 'toast' existe en tu api.js o globalmente
                 if (window.toast) toast.error(err.message);
@@ -278,7 +278,7 @@
             try {
                 const res = await auth.register(name, email, password);
                 saveAuth(res.data.token, res.data.user);
-                window.location.href = '/frontend/dashboard.html';
+                window.location.href = './dashboard.html';
             } catch (err) {
                 if (window.toast) toast.error(err.message);
                 else alert(err.message);
