@@ -21,6 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const app = express();
+/* Ajustes para produccion */
 app.set('trust proxy', 1);
 // ─── Seguridad ────────────────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
