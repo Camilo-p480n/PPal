@@ -28,7 +28,7 @@ app.set('trust proxy', 1);
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN?.split(",") || "http://127.0.0.1:5500",
+    origin: process.env.CORS_ORIGIN?.split(",") || "*",
     credentials: true,
   })
 );
@@ -67,7 +67,7 @@ app.use("/api/gmail", gmailRoutes);
 
 // ─── SPA fallback ─────────────────────────────────────────────────────────────
 app.get(/^(?!\/api).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "frontend", "index.html"));
+  res.sendFile(path.join(__dirname,"..", "..", "frontend", "index.html"));
 });
 
 // ─── 404 para rutas API no encontradas ────────────────────────────────────────
