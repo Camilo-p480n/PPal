@@ -22,12 +22,12 @@ if (token) {
     localStorage.setItem('user', JSON.stringify({ name, email, avatar }));
 
     // Limpiar el token de la URL por seguridad
-    window.history.replaceState({}, document.title, '/frontend/dashboard.html');
+    window.history.replaceState({}, document.title, './dashboard.html');
 }
 
 // Si no hay token en ningún lado, redirigir al login
 if (!localStorage.getItem('token')) {
-    window.location.href = '/frontend/index.html';
+    window.location.href = './index.html';
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────

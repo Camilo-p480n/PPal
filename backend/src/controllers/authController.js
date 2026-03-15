@@ -69,7 +69,7 @@ export const googleAuth = async (req, res, next) => {
 export const googleCallback = [
   passport.authenticate("google", {
     session: false,
-    failureRedirect: `${process.env.FRONTEND_URL}/frontend/index.html?error=oauth_failed`,
+    failureRedirect: `${process.env.FRONTEND_URL}./index.html?error=oauth_failed`,
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -79,7 +79,7 @@ export const googleCallback = [
     );
 
     res.redirect(
-      `${process.env.FRONTEND_URL}/frontend/dashboard.html` +
+      `${process.env.FRONTEND_URL}./dashboard.html` +
         `?token=${token}` +
         `&name=${encodeURIComponent(req.user.name)}` +
         `&email=${encodeURIComponent(req.user.email)}` +
