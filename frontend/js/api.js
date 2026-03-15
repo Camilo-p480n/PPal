@@ -2,7 +2,7 @@
 // Cliente centralizado para consumir la API del backend.
 // Todos los módulos del frontend importan desde aquí.
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'http://pocketpal.emausoft.com/api';
 
 // ─── Auth helpers ─────────────────────────────────────────────────────────────
 
